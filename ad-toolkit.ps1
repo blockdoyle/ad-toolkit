@@ -30,7 +30,12 @@ Function NewUser{ # Creates a new user
     $splitname = $fullname.Split(" ")
     $firstname = $splitname[0]
     $lastname = $splitname[1]
-    $username = $firstname.Substring(0,1) + $lastname.Substring(0,$lastname.length)
+    if ($lastname.length -gt 7){
+        $username = $firstname.Substring(0,1) + $lastname.Substring(0,7)
+    }
+    else {
+        $username = $firstname.Substring(0,1) + $lastname.Substring(0,$lastname.length)
+    }
     $username = $username.ToLower()
     $email = $username + "@acme.com"
     $title = Read-Host "Enter job title"
