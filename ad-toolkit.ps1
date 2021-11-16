@@ -61,4 +61,6 @@ Function DeleteUser{
     Remove-ADUser -Identity $delUser -Confirm
 }
 
-MainMenu
+while ($isdone -ne 1){
+    MainMenu
+}
