@@ -25,6 +25,7 @@ Function ShowAll{ #Shows all users or shows specified user
 }
 
 Function NewUser{ # Creates a new user
+    $ouPath = Read-Host "Enter 'Users and Groups' path"
     $fullname = Read-Host "Enter full name"
     $splitname = $fullname.Split(" ")
     $firstname = $splitname[0]
@@ -44,7 +45,8 @@ Function NewUser{ # Creates a new user
     $country = Read-Host "Enter country (must be abbreviated, e.g 'CA')"
     $password = Read-Host -AsSecureString "Enter password for user"
 
-    New-ADUser -Name $fullname -GivenName $firstname -Surname $lastname -DisplayName $fullname -UserPrincipalName $username -SamAccountName $username -Title $title -Department $depart -Company $company -Office $office -OfficePhone $telephone -StreetAddress $streetadd -City $city -State $stateprov -PostalCode $postal -Country $country -EmailAddress $email -AccountPassword $password -Path "OU=Employees,OU=Hamilton,DC=acme,DC=com" -Confirm
+    Write-Host ""
+    New-ADUser -Name $fullname -GivenName $firstname -Surname $lastname -DisplayName $fullname -UserPrincipalName $username -SamAccountName $username -Title $title -Department $depart -Company $company -Office $office -OfficePhone $telephone -StreetAddress $streetadd -City $city -State $stateprov -PostalCode $postal -Country $country -EmailAddress $email -AccountPassword $password -Path "$ouPath,DC=acme,DC=com" -Confirm
 
     $enable = Read-Host "Enable account?(Y\n)"
     $enable = $enable.toupper()
