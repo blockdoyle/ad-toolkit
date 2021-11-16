@@ -32,7 +32,6 @@ Function NewUser{ # Creates a new user
     $username = $firstname.Substring(0,1) + $lastname.Substring(0,$lastname.length)
     $username = $username.ToLower()
     $email = $username + "@acme.com"
-    write-host  ""
     $title = Read-Host "Enter job title"
     $depart = Read-Host "Enter department name"
     $company = Read-Host "Enter company name"
