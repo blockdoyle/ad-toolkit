@@ -15,12 +15,12 @@ Function MainMenu{
 }
 
 Function ShowAll{ #Shows all users or shows specified user
-    $suser = Read-Host "Search user"
-    if ($suser -eq "*"){
+    $searchUser = Read-Host "Search user"
+    if ($searchUser -eq "*"){
         Get-ADUser -Filter *
     }
     else {
-        Get-ADUser -Identity $suser
+        Get-ADUser -Identity $searchUser
     }
 }
 
