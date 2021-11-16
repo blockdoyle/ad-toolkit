@@ -10,6 +10,7 @@ Function MainMenu{
     switch ($c){
         1 {ShowAll}
         2 {NewUser}
+        3 {DeleteUser}
     }
 }
 
@@ -52,6 +53,11 @@ Function NewUser{ # Creates a new user
     {
         Enable-ADAccount -Identity $username
     }
+}
+
+Function DeleteUser{
+    $delUser = Read-Host "Enter user identity to remove"
+    Remove-ADUser -Identity $delUser -Confirm
 }
 
 MainMenu
