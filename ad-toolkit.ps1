@@ -5,7 +5,7 @@ Function MainMenu{
     "1) Show all users              2) Create User(s)"
     "3) Delete User(s)              4) Create Group(s)"
     "5) Delete Group(s)"
-    ""
+    "98) Set Object Path"
     $c = Read-Host "Select option"
     switch ($c){
         1 {ShowAll}
@@ -13,7 +13,12 @@ Function MainMenu{
         3 {DeleteUser}
         4 {NewGroup}
         5 {DeleteGroup}
+        99 {SetOU}
     }
+}
+
+Function SetOU{
+    $Global:oupath = Read-Host "Enter OU Path"
 }
 
 Function ShowAll{ #Shows all users or shows specified user
@@ -27,7 +32,7 @@ Function ShowAll{ #Shows all users or shows specified user
 }
 
 Function NewUser{ # Creates a new user
-    $ouPath = Read-Host "Enter 'Users and Groups' path"
+    # $Global:oupath = Read-Host "Enter 'Users and Groups' path"
     $fullname = Read-Host "Enter full name"
     $splitname = $fullname.Split(" ")
     $firstname = $splitname[0]
@@ -53,7 +58,7 @@ Function NewUser{ # Creates a new user
     $password = Read-Host -AsSecureString "Enter password for user"
 
     Write-Host ""
-    New-ADUser -Name $fullname -GivenName $firstname -Surname $lastname -DisplayName $fullname -UserPrincipalName $username -SamAccountName $username -Title $title -Department $depart -Company $company -Office $office -OfficePhone $telephone -StreetAddress $streetadd -City $city -State $stateprov -PostalCode $postal -Country $country -EmailAddress $email -AccountPassword $password -Path "$ouPath,DC=acme,DC=com" -Confirm
+    New-ADUser -Name $fullname -GivenName $firstname -Surname $lastname -DisplayName $fullname -UserPrincipalName $username -SamAccountName $username -Title $title -Department $depart -Company $company -Office $office -OfficePhone $telephone -StreetAddress $streetadd -City $city -State $stateprov -PostalCode $postal -Country $country -EmailAddress $email -AccountPassword $password -Path "$Global:oupath,DC=acme,DC=com" -Confirm
 
     $enable = Read-Host "Enable account?(Y\n)"
     $enable = $enable.toupper()
@@ -69,7 +74,7 @@ Function DeleteUser{
 }
 
 Function NewGroup {
-    $ouPath = Read-Host "OU Path"
+    # $Global:oupath = Read-Host "OU Path"
     $gName = Read-Host "Enter Group Name"
     $splitgName = $gName.split()
     $netgName = ""
@@ -81,7 +86,7 @@ Function NewGroup {
     $desc = Read-Host "Description"
     $managedBy = Read-Host "Managed by"
     
-    New-ADGroup -Name $gName -SamAccountName $netgName -GroupCategory Security -GroupScope Global -DisplayName $gName -ManagedBy $managedBy -Path "$oupath,DC=acme,DC=com" -Description $desc
+    New-ADGroup -Name $gName -SamAccountName $netgName -GroupCategory Security -GroupScope Global -DisplayName $gName -ManagedBy $managedBy -Path "$Global:oupath,DC=acme,DC=com" -Description $desc
 }
 
 Function DeleteGroup{
