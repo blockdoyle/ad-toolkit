@@ -4,7 +4,7 @@ $motd
 Function MainMenu{
     "1) Show all users              2) Create User(s)"
     "3) Delete User(s)              4) Create Group(s)"
-    "5) Delete Group(s)"
+    "5) Delete Group(s)             6) Backup User Groups"
     "98) Set Object Path            99) Set Domain"
     ""
     $c = Read-Host "Select option"
@@ -14,6 +14,7 @@ Function MainMenu{
         3 {DeleteUser}
         4 {NewGroup}
         5 {DeleteGroup}
+        6 {BackupUserGroups}
         98 {SetOU}
         99 {SetDC}
     }
@@ -102,6 +103,13 @@ Function NewGroup {
 Function DeleteGroup{
     $delGroup = Read-Host "Enter group SAM name to remove"
     Remove-ADGroup -Identity $delGroup -Confirm
+}
+
+Function BackupUserGroups{
+    $user = read-host "Enter username to backup"
+    $fpath = Read-Host "Enter backup location (DO NOT ENTER FILENAME)"
+    
+    $groups = Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property name | Out-File "$fpath\$user.txt"
 }
 
 while ($isdone -ne 1){
