@@ -12,6 +12,7 @@ Function MainMenu{
         2 {NewUser}
         3 {DeleteUser}
         4 {NewGroup}
+        5 {DeleteGroup}
     }
 }
 
@@ -81,6 +82,11 @@ Function NewGroup {
     $managedBy = Read-Host "Managed by"
     
     New-ADGroup -Name $gName -SamAccountName $netgName -GroupCategory Security -GroupScope Global -DisplayName $gName -ManagedBy $managedBy -Path "$oupath,DC=acme,DC=com" -Description $desc
+}
+
+Function DeleteGroup{
+    $delGroup = Read-Host "Enter group SAM name to remove"
+    Remove-ADGroup -Identity $delGroup -Confirm
 }
 
 while ($isdone -ne 1){
