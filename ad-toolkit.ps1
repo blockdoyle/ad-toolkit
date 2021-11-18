@@ -5,6 +5,7 @@ Function MainMenu{
     "1) Show all users              2) Create User(s)"
     "3) Delete User(s)              4) Create Group(s)"
     "5) Delete Group(s)             6) Backup User Groups"
+    "7) Restore User Groups"
     "98) Set Object Path            99) Set Domain"
     ""
     $c = Read-Host "Select option"
@@ -15,6 +16,7 @@ Function MainMenu{
         4 {NewGroup}
         5 {DeleteGroup}
         6 {BackupUserGroups}
+        7 {RestoreUserGroups}
         98 {SetOU}
         99 {SetDC}
     }
@@ -109,7 +111,19 @@ Function BackupUserGroups{
     $user = read-host "Enter username to backup"
     $fpath = Read-Host "Enter backup location (DO NOT ENTER FILENAME)"
     
-    Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property name | Out-File "$fpath\$user.txt"
+    Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property SamAccountName | Out-File "$fpath\$user.txt"
+}
+
+Function RestoreUserGroups{
+    $user = read-host "Enter username to restore"
+    $fpath = Read-Host "Enter restore location (DO NOT ENTER FILENAME)"
+
+    $groups = Get-Content "$fpath\$user.txt" | Where-Object {$_.trimend() -ne ""}
+    $groups = $groups.trim()
+
+    foreach ($group in $groups) {
+        Add-ADGroupMember -Identity $group -Members $user
+    }
 }
 
 while ($isdone -ne 1){
