@@ -109,7 +109,7 @@ Function BackupUserGroups{
     $user = read-host "Enter username to backup"
     $fpath = Read-Host "Enter backup location (DO NOT ENTER FILENAME)"
     
-    $groups = Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property name | Out-File "$fpath\$user.txt"
+    Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property name | Out-File "$fpath\$user.txt"
 }
 
 while ($isdone -ne 1){
