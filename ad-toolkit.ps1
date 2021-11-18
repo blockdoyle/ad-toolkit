@@ -11,6 +11,7 @@ Function MainMenu{
         1 {ShowAll}
         2 {NewUser}
         3 {DeleteUser}
+        4 {NewGroup}
     }
 }
 
@@ -64,6 +65,22 @@ Function NewUser{ # Creates a new user
 Function DeleteUser{
     $delUser = Read-Host "Enter user identity to remove"
     Remove-ADUser -Identity $delUser -Confirm
+}
+
+Function NewGroup {
+    $ouPath = Read-Host "OU Path"
+    $gName = Read-Host "Enter Group Name"
+    $splitgName = $gName.split()
+    $netgName = ""
+    foreach ($word in $splitgName){
+        $netgName = $netgName + $word.Substring(0,5)
+    }
+    "Group name is: $netgName"
+
+    $desc = Read-Host "Description"
+    $managedBy = Read-Host "Managed by"
+    
+    New-ADGroup -Name $gName -SamAccountName $netgName -GroupCategory Security -GroupScope Global -DisplayName $gName -ManagedBy $managedBy -Path "$oupath,DC=acme,DC=com" -Description $desc
 }
 
 while ($isdone -ne 1){
