@@ -92,7 +92,7 @@ Function NewUser{ # Creates a new user
 
 Function CopyUserGroup{
     param ($user)
-    $targetUser = Read-Host "Which user would you like to copy groups from?"
+    $targetUser = Read-Host "Which user or group would you like to copy groups from?"
     $fpath = Read-Host "Enter restore location (DO NOT ENTER FILENAME)"
 
     $groups = Get-Content "$fpath\$targetUser.txt" | Where-Object {$_.trimend() -ne ""}
@@ -122,7 +122,15 @@ Function NewGroup {
     $managedBy = Read-Host "Managed by"
     
     New-ADGroup -Name $gName -SamAccountName $netgName -GroupCategory Security -GroupScope Global -DisplayName $gName -ManagedBy $managedBy -Path "$Global:oupath,$Global:dcpath" -Description $desc
-}
+
+    $copyChoice = Read-Host "Copy groups from another group?(Y\n)"
+    switch ($copyChoice) {
+        "Y" {CopyUserGroup($netgName)}
+        "y" {CopyUserGroup($netgName)}
+        "" {CopyUserGroup($netgName)}
+        "N" {continue}
+        "n" {continue}
+}}
 
 Function DeleteGroup{
     $delGroup = Read-Host "Enter group SAM name to remove"
