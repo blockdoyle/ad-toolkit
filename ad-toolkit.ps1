@@ -4,8 +4,8 @@ $motd
 Function MainMenu{
     "1) Show all users              2) Create User(s)"
     "3) Delete User(s)              4) Create Group(s)"
-    "5) Delete Group(s)             6) Backup User Groups"
-    "7) Restore User Groups"
+    "5) Delete Group(s)             6) Backup User or Groups"
+    "7) Restore User or Groups"
     "98) Set Object Path            99) Set Domain"
     ""
     $c = Read-Host "Select option"
