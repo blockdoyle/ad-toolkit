@@ -40,7 +40,12 @@ Function ShowAll{ #Shows all users or shows specified user
         Get-ADUser -Filter *
     }
     else {
-        Get-ADUser -Identity $searchUser
+        $getDetailed = Read-Host "Get detailed info?(y/N)"
+        switch ($getDetailed){
+            "Y" {Get-ADUser -Identity $searchUser -Properties *}
+            "" {Get-ADUser -Identity $searchUser}
+            "N" {Get-ADUser -Identity $searchUser}
+        }
     }
 }
 
