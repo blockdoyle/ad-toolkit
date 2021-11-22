@@ -130,14 +130,14 @@ Function DeleteGroup{
 }
 
 Function BackupUserGroups{
-    $user = read-host "Enter username to backup"
+    $user = read-host "Enter username or Group SAM name to backup"
     $fpath = Read-Host "Enter backup location (DO NOT ENTER FILENAME)"
     
     Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property SamAccountName | Out-File "$fpath\$user.txt"
 }
 
 Function RestoreUserGroups{
-    $user = read-host "Enter username to restore"
+    $user = read-host "Enter username or Group SAM name to restore"
     $fpath = Read-Host "Enter restore location (DO NOT ENTER FILENAME)"
 
     $groups = Get-Content "$fpath\$user.txt" | Where-Object {$_.trimend() -ne ""}
