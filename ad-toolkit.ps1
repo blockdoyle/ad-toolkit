@@ -88,10 +88,8 @@ Function NewUser{ # Creates a new user
     $copyChoice = Read-Host "Copy groups from another user?(Y\n)"
     switch ($copyChoice) {
         "Y" {CopyUserGroup($username)}
-        "y" {CopyUserGroup($username)}
         "" {CopyUserGroup($username)}
         "N" {continue}
-        "n" {continue}
     }
 }
 
@@ -131,10 +129,8 @@ Function NewGroup {
     $copyChoice = Read-Host "Copy groups from another group?(Y\n)"
     switch ($copyChoice) {
         "Y" {CopyUserGroup($netgName)}
-        "y" {CopyUserGroup($netgName)}
         "" {CopyUserGroup($netgName)}
         "N" {continue}
-        "n" {continue}
 }}
 
 Function DeleteGroup{
