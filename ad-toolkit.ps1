@@ -79,6 +79,28 @@ Function NewUser{ # Creates a new user
     {
         Enable-ADAccount -Identity $username
     }
+
+    $copyChoice = Read-Host "Copy groups from another user?(Y\n)"
+    switch ($copyChoice) {
+        "Y" {CopyUserGroup($username)}
+        "y" {CopyUserGroup($username)}
+        "" {CopyUserGroup($username)}
+        "N" {continue}
+        "n" {continue}
+    }
+}
+
+Function CopyUserGroup{
+    param ($user)
+    $targetUser = Read-Host "Which user would you like to copy groups from?"
+    $fpath = Read-Host "Enter restore location (DO NOT ENTER FILENAME)"
+
+    $groups = Get-Content "$fpath\$targetUser.txt" | Where-Object {$_.trimend() -ne ""}
+    $groups = $groups.trim()
+
+    foreach ($group in $groups) {
+        Add-ADGroupMember -Identity $group -Members $user
+    }
 }
 
 Function DeleteUser{
