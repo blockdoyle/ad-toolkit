@@ -170,7 +170,7 @@ Function GetLogs{
     }
     $size = Read-Host "How many entries to display?"
     if ($size -eq ""){
-        Get-EventLog -LogName "AD-Toolkit" -ComputerName "adc-s01"| more
+        Get-EventLog -LogName $selectLog -ComputerName "adc-s01"| more
     }
     else{
         Get-EventLog -LogName $selectLog -Newest $size -ComputerName "adc-s01" | more
@@ -180,7 +180,10 @@ Function GetLogs{
 SetOU
 SetDC
 
-New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName "a"
+$logFileExists = Get-EventLog -ComputerName "adc-s01" -List | Where-Object {$_.logdisplayname -eq "AD-Toolkit"} 
+if (! $logFileExists) {
+    New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName "adc-s01"
+}
 
 while ($isdone -ne 1){
     MainMenu
