@@ -157,6 +157,9 @@ Function RestoreUserGroups{
     }
 }
 
+SetOU
+SetDC
+
 while ($isdone -ne 1){
     MainMenu
 }
