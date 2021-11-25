@@ -5,7 +5,7 @@ Function MainMenu{
     "1) Show all users              2) Create User(s)"
     "3) Delete User(s)              4) Create Group(s)"
     "5) Delete Group(s)             6) Backup User or Groups"
-    "7) Restore User or Groups"
+    "7) Restore User or Groups      8) Get Logs"
     "98) Set Object Path            99) Set Domain"
     ""
     $c = Read-Host "Select option"
@@ -17,6 +17,7 @@ Function MainMenu{
         5 {DeleteGroup}
         6 {BackupUserGroups}
         7 {RestoreUserGroups}
+        8 {GetLogs}
         98 {SetOU}
         99 {SetDC}
     }
@@ -158,23 +159,28 @@ Function RestoreUserGroups{
 }
 
 Function GetLogs{
-    $availLogs = Get-EventLog -List
+    $availLogs = Get-EventLog -ComputerName "adc-s01" -list
     $logList = ""
     foreach ($_ in $availLogs) {
         $logList += $_.Log + ", "
     }
     $selectLog = Read-Host "Select a log to view. `"AD-Toolkit`" is selected by default.`n$loglist"
+    if ($selectLog -eq ""){
+        $selectLog = "AD-Toolkit"
+    }
     $size = Read-Host "How many entries to display?"
     if ($size -eq ""){
-        Get-EventLog -LogName $selectLog | more
+        Get-EventLog -LogName "AD-Toolkit" -ComputerName "adc-s01"| more
     }
     else{
-        Get-EventLog -LogName $selectLog -Newest $size | more
+        Get-EventLog -LogName $selectLog -Newest $size -ComputerName "adc-s01" | more
     }
 }
 
 SetOU
 SetDC
+
+New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName "a"
 
 while ($isdone -ne 1){
     MainMenu
