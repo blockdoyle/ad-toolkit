@@ -157,6 +157,22 @@ Function RestoreUserGroups{
     }
 }
 
+Function GetLogs{
+    $availLogs = Get-EventLog -List
+    $logList = ""
+    foreach ($_ in $availLogs) {
+        $logList += $_.Log + ", "
+    }
+    $selectLog = Read-Host "Select a log to view. `"AD-Toolkit`" is selected by default.`n$loglist"
+    $size = Read-Host "How many entries to display?"
+    if ($size -eq ""){
+        Get-EventLog -LogName $selectLog | more
+    }
+    else{
+        Get-EventLog -LogName $selectLog -Newest $size | more
+    }
+}
+
 SetOU
 SetDC
 
