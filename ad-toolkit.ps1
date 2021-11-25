@@ -56,13 +56,13 @@ Function NewUser{ # Creates a new user
     $firstname = $splitname[0]
     $lastname = $splitname[1]
     if ($lastname.length -gt 7){
-        $username = $firstname.Substring(0,1) + $lastname.Substring(0,7)
+        $Global:username = $firstname.Substring(0,1) + $lastname.Substring(0,7)
     }
     else {
-        $username = $firstname.Substring(0,1) + $lastname.Substring(0,$lastname.length)
+        $Global:username = $firstname.Substring(0,1) + $lastname.Substring(0,$lastname.length)
     }
-    $username = $username.ToLower()
-    $email = $username + "@acme.com"
+    $Global:username = $Global:username.ToLower()
+    $email = $Global:username + "@acme.com"
     $title = Read-Host "Enter job title"
     $depart = Read-Host "Enter department name"
     $company = Read-Host "Enter company name"
@@ -76,19 +76,19 @@ Function NewUser{ # Creates a new user
     $password = Read-Host -AsSecureString "Enter password for user"
 
     Write-Host ""
-    New-ADUser -Name $fullname -GivenName $firstname -Surname $lastname -DisplayName $fullname -UserPrincipalName $username -SamAccountName $username -Title $title -Department $depart -Company $company -Office $office -OfficePhone $telephone -StreetAddress $streetadd -City $city -State $stateprov -PostalCode $postal -Country $country -EmailAddress $email -AccountPassword $password -Path "$Global:oupath,$Global:dcpath" -Confirm
+    New-ADUser -Name $fullname -GivenName $firstname -Surname $lastname -DisplayName $fullname -UserPrincipalName $Global:username -SamAccountName $Global:username -Title $title -Department $depart -Company $company -Office $office -OfficePhone $telephone -StreetAddress $streetadd -City $city -State $stateprov -PostalCode $postal -Country $country -EmailAddress $email -AccountPassword $password -Path "$Global:oupath,$Global:dcpath" -Confirm
 
     $enable = Read-Host "Enable account?(Y\n)"
     $enable = $enable.toupper()
     if ($enable -eq "Y" -or $enable -eq "")
     {
-        Enable-ADAccount -Identity $username
+        Enable-ADAccount -Identity $Global:username
     }
 
     $copyChoice = Read-Host "Copy groups from another user?(Y\n)"
     switch ($copyChoice) {
-        "Y" {CopyUserGroup($username)}
-        "" {CopyUserGroup($username)}
+        "Y" {CopyUserGroup($Global:username)}
+        "" {CopyUserGroup($Global:username)}
         "N" {continue}
     }
 }
