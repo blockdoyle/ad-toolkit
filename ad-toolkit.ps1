@@ -42,6 +42,7 @@ Function MainMenu{
 
 Function SetOU{
     $Global:oupath = Read-Host "Enter OU Path"
+    WriteLogs(1001)
 }
 
 Function SetDC{
@@ -50,11 +51,13 @@ Function SetDC{
     $dc1 = $splitDomName[0]
     $dc2 = $splitDomName[1]
     $Global:dcpath = "DC=$dc1,DC=$dc2"
+    WriteLogs(1002)
 }
 
 Function ShowAll{ #Shows all users or shows specified user
     $searchUser = Read-Host "Search user"
     if ($searchUser -eq "*"){
+        WriteLogs(1003)
         Get-ADUser -Filter *
     }
     else {
@@ -64,6 +67,7 @@ Function ShowAll{ #Shows all users or shows specified user
             "" {Get-ADUser -Identity $searchUser}
             "N" {Get-ADUser -Identity $searchUser}
         }
+        WriteLogs(1003)
     }
 }
 
@@ -95,7 +99,7 @@ Function NewUser{ # Creates a new user
 
     Write-Host ""
     New-ADUser -Name $fullname -GivenName $firstname -Surname $lastname -DisplayName $fullname -UserPrincipalName $Global:username -SamAccountName $Global:username -Title $title -Department $depart -Company $company -Office $office -OfficePhone $telephone -StreetAddress $streetadd -City $city -State $stateprov -PostalCode $postal -Country $country -EmailAddress $email -AccountPassword $password -Path "$Global:oupath,$Global:dcpath" -Confirm
-
+    WriteLogs(1004)
     $enable = Read-Host "Enable account?(Y\n)"
     $enable = $enable.toupper()
     if ($enable -eq "Y" -or $enable -eq "")
@@ -121,12 +125,14 @@ Function CopyUserGroup{
 
     foreach ($group in $groups) {
         Add-ADGroupMember -Identity $group -Members $user
+        WriteLogs(1010)
     }
 }
 
 Function DeleteUser{
     $delUser = Read-Host "Enter user identity to remove"
     Remove-ADUser -Identity $delUser -Confirm
+    WriteLogs(1005)
 }
 
 Function NewGroup {
@@ -143,6 +149,7 @@ Function NewGroup {
     $managedBy = Read-Host "Managed by"
     
     New-ADGroup -Name $gName -SamAccountName $netgName -GroupCategory Security -GroupScope Global -DisplayName $gName -ManagedBy $managedBy -Path "$Global:oupath,$Global:dcpath" -Description $desc
+    WriteLogs(1006)
 
     $copyChoice = Read-Host "Copy groups from another group?(Y\n)"
     switch ($copyChoice) {
@@ -154,6 +161,7 @@ Function NewGroup {
 Function DeleteGroup{
     $delGroup = Read-Host "Enter group SAM name to remove"
     Remove-ADGroup -Identity $delGroup -Confirm
+    WriteLogs(1007)
 }
 
 Function BackupUserGroups{
@@ -161,6 +169,7 @@ Function BackupUserGroups{
     $fpath = Read-Host "Enter backup location (DO NOT ENTER FILENAME)"
     
     Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property SamAccountName | Out-File "$fpath\$user.txt"
+    WriteLogs(1008)
 }
 
 Function RestoreUserGroups{
@@ -172,6 +181,7 @@ Function RestoreUserGroups{
 
     foreach ($group in $groups) {
         Add-ADGroupMember -Identity $group -Members $user
+        WriteLogs(1009)
     }
 }
 
