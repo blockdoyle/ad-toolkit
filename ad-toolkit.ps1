@@ -9,13 +9,13 @@ Function WriteLogs{
         1001 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "Organizational Unit variable set by $env:username" -ComputerName adc-s01}
         1002 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "Domain Controller variable set by $env:username" -ComputerName adc-s01}
         1003 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "User details were read by $env:username" -ComputerName adc-s01}
-        1004 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$env:username created Active Directory account $Global:user" -ComputerName adc-s01}
-        1005 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:user was deleted by $env:username" -ComputerName adc-s01}
-        1006 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$env:username created Active Directory security group $Global:group" -ComputerName adc-s01}
-        1007 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:group was deleted by $env:username" -ComputerName adc-s01}
+        1004 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$env:username created Active Directory account $Global:SAMname" -ComputerName adc-s01}
+        1005 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname was deleted by $env:username" -ComputerName adc-s01}
+        1006 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$env:username created Active Directory security group $Global:SAMname" -ComputerName adc-s01}
+        1007 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname was deleted by $env:username" -ComputerName adc-s01}
         1008 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were backed up by $env:username" -ComputerName adc-s01}
         1009 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were restored by $env:username" -ComputerName adc-s01}
-        1010 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were copied to $Global:user by $env:username" -ComputerName adc-s01}
+        1010 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were copied to $Global:SAMname by $env:username" -ComputerName adc-s01}
     }
 }
 Function MainMenu{
