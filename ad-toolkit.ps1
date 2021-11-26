@@ -99,6 +99,7 @@ Function NewUser{ # Creates a new user
 
     Write-Host ""
     New-ADUser -Name $fullname -GivenName $firstname -Surname $lastname -DisplayName $fullname -UserPrincipalName $Global:username -SamAccountName $Global:username -Title $title -Department $depart -Company $company -Office $office -OfficePhone $telephone -StreetAddress $streetadd -City $city -State $stateprov -PostalCode $postal -Country $country -EmailAddress $email -AccountPassword $password -Path "$Global:oupath,$Global:dcpath" -Confirm
+    $Global:SAMname = $username
     WriteLogs(1004)
     $enable = Read-Host "Enable account?(Y\n)"
     $enable = $enable.toupper()
@@ -125,6 +126,7 @@ Function CopyUserGroup{
 
     foreach ($group in $groups) {
         Add-ADGroupMember -Identity $group -Members $user
+        $Global:SAMname = $group
         WriteLogs(1010)
     }
 }
@@ -132,6 +134,7 @@ Function CopyUserGroup{
 Function DeleteUser{
     $delUser = Read-Host "Enter user identity to remove"
     Remove-ADUser -Identity $delUser -Confirm
+    $Global:SAMname = $delUser
     WriteLogs(1005)
 }
 
@@ -149,6 +152,7 @@ Function NewGroup {
     $managedBy = Read-Host "Managed by"
     
     New-ADGroup -Name $gName -SamAccountName $netgName -GroupCategory Security -GroupScope Global -DisplayName $gName -ManagedBy $managedBy -Path "$Global:oupath,$Global:dcpath" -Description $desc
+    $Global:SAMname = $netgName
     WriteLogs(1006)
 
     $copyChoice = Read-Host "Copy groups from another group?(Y\n)"
@@ -161,6 +165,7 @@ Function NewGroup {
 Function DeleteGroup{
     $delGroup = Read-Host "Enter group SAM name to remove"
     Remove-ADGroup -Identity $delGroup -Confirm
+    $Global:SAMname = $delGroup
     WriteLogs(1007)
 }
 
@@ -169,6 +174,7 @@ Function BackupUserGroups{
     $fpath = Read-Host "Enter backup location (DO NOT ENTER FILENAME)"
     
     Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property SamAccountName | Out-File "$fpath\$user.txt"
+    $Global:SAMname = $user
     WriteLogs(1008)
 }
 
@@ -181,6 +187,7 @@ Function RestoreUserGroups{
 
     foreach ($group in $groups) {
         Add-ADGroupMember -Identity $group -Members $user
+        $Global:SAMname = $group
         WriteLogs(1009)
     }
 }
