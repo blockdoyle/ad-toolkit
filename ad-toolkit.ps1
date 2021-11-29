@@ -193,7 +193,7 @@ Function RestoreUserGroups{
 }
 
 Function GetLogs{
-    $availLogs = Get-EventLog -ComputerName ""als-s02"" -list
+    $availLogs = Get-EventLog -ComputerName "als-s02" -list
     $logList = ""
     foreach ($_ in $availLogs) {
         $logList += $_.Log + ", "
@@ -204,19 +204,19 @@ Function GetLogs{
     }
     $size = Read-Host "How many entries to display?"
     if ($size -eq ""){
-        Get-EventLog -LogName $selectLog -ComputerName ""als-s02""| more
+        Get-EventLog -LogName $selectLog -ComputerName "als-s02"| more
     }
     else{
-        Get-EventLog -LogName $selectLog -Newest $size -ComputerName ""als-s02"" | more
+        Get-EventLog -LogName $selectLog -Newest $size -ComputerName "als-s02" | more
     }
 }
 
 SetOU
 SetDC
 
-$logFileExists = Get-EventLog -ComputerName ""als-s02"" -List | Where-Object {$_.logdisplayname -eq "AD-Toolkit"} 
+$logFileExists = Get-EventLog -ComputerName "als-s02" -List | Where-Object {$_.logdisplayname -eq "AD-Toolkit"} 
 if (! $logFileExists) {
-    New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName ""als-s02""
+    New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName "als-s02"
 }
 
 while ($isdone -ne 1){
