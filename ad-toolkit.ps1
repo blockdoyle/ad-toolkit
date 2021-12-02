@@ -194,16 +194,18 @@ Function BackupUserGroups{
 }
 
 Function RestoreUserGroups{
-    $user = read-host "Enter username or Group SAM name to restore"
+    $users = read-host "Enter username or Group SAM name to restore"
+    $users = $users.split(",").Replace(" ","")
     $fpath = Read-Host "Enter restore location (DO NOT ENTER FILENAME)"
 
-    $groups = Get-Content "$fpath\$user.txt" | Where-Object {$_.trimend() -ne ""}
-    $groups = $groups.trim()
-
-    foreach ($group in $groups) {
-        Add-ADGroupMember -Identity $group -Members $user
-        $Global:SAMname = $group
-        WriteLogs(1009)
+    foreach ($user in $users) {
+        $groups = Get-Content "$fpath\$user.txt" | Where-Object {$_.trimend() -ne ""}
+        $groups = $groups.trim()    
+        foreach ($group in $groups) {
+            Add-ADGroupMember -Identity $group -Members $user
+            $Global:SAMname = $group
+            WriteLogs(1009)
+        }    
     }
 }
 
