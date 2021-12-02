@@ -181,10 +181,14 @@ Function DeleteGroup{
 }
 
 Function BackupUserGroups{
-    $user = read-host "Enter username or Group SAM name to backup"
+    $users = read-host "Enter username or Group SAM name to backup"
     $fpath = Read-Host "Enter backup location (DO NOT ENTER FILENAME)"
+    $users = $users.Split(",").Replace(" ","")
+
+    foreach ($user in $users) {
+        Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property SamAccountName | Out-File "$fpath\$user.txt"  
+    }
     
-    Get-ADPrincipalGroupMembership -Identity $user | Format-Table -HideTableHeaders -Property SamAccountName | Out-File "$fpath\$user.txt"
     $Global:SAMname = $user
     WriteLogs(1008)
 }
