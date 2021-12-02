@@ -1,6 +1,6 @@
+#Requires -RunAsAdministrator
 $motd = Get-Content .\motd
 $motd
-WriteLogs(1000)
 
 Function WriteLogs{
     Param($x)
@@ -18,6 +18,8 @@ Function WriteLogs{
         1010 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were copied to $Global:SAMname by $env:username" -ComputerName "als-s02"}
     }
 }
+WriteLogs(1000)
+
 Function MainMenu{
     "1) Show all users              2) Create User(s)"
     "3) Delete User(s)              4) Create Group(s)"
@@ -31,10 +33,11 @@ Function MainMenu{
         2 {NewUser}
         3 {DeleteUser}
         4 {NewGroup}
-        5 {DeleteGroup}
-        6 {BackupUserGroups}
-        7 {RestoreUserGroups}
-        8 {GetLogs}
+        5 {UserGroupAdd}
+        6 {DeleteGroup}
+        7 {BackupUserGroups}
+        8 {RestoreUserGroups}
+        9 {GetLogs}
         98 {SetOU}
         99 {SetDC}
     }
@@ -113,6 +116,14 @@ Function NewUser{ # Creates a new user
         "Y" {CopyUserGroup($Global:username)}
         "" {CopyUserGroup($Global:username)}
         "N" {continue}
+    }
+}
+Function UserGroupAdd{
+    $users = Read-Host "Enter name of user(s). Comma ',' separated"
+    $users = $users.split(",").Replace(" ","")
+    $groupName = Read-Host "Enter group name"
+    foreach ($user in $users) {
+        Add-ADGroupMember -Identity $groupName -Members $user
     }
 }
 
