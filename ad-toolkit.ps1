@@ -1,7 +1,7 @@
 #Requires -RunAsAdministrator
-$logFileExists = Get-EventLog -ComputerName "als-s02" -List | Where-Object {$_.logdisplayname -eq "AD-Toolkit"} 
+$logFileExists = Get-EventLog -ComputerName "als-s03" -List | Where-Object {$_.logdisplayname -eq "AD-Toolkit"} 
 if (! $logFileExists) {
-    New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName "als-s02"
+    New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName "als-s03"
 }
 
 $motd = Get-Content .\motd
@@ -10,17 +10,17 @@ $motd
 Function WriteLogs{
     Param($x)
     switch ($x){
-        1000 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "AD-Toolkit application started by $env:username" -ComputerName "als-s02"}
-        1001 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "Organizational Unit variable set by $env:username" -ComputerName "als-s02"}
-        1002 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "Domain Controller variable set by $env:username" -ComputerName "als-s02"}
-        1003 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "User details were read by $env:username" -ComputerName "als-s02"}
-        1004 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$env:username created Active Directory account $Global:SAMname" -ComputerName "als-s02"}
-        1005 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname was deleted by $env:username" -ComputerName "als-s02"}
-        1006 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$env:username created Active Directory security group $Global:SAMname" -ComputerName "als-s02"}
-        1007 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname was deleted by $env:username" -ComputerName "als-s02"}
-        1008 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were backed up by $env:username" -ComputerName "als-s02"}
-        1009 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were restored by $env:username" -ComputerName "als-s02"}
-        1010 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were copied to $Global:SAMname by $env:username" -ComputerName "als-s02"}
+        1000 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "AD-Toolkit application started by $env:username" -ComputerName "als-s03"}
+        1001 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "Organizational Unit variable set by $env:username" -ComputerName "als-s03"}
+        1002 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "Domain Controller variable set by $env:username" -ComputerName "als-s03"}
+        1003 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "User details were read by $env:username" -ComputerName "als-s03"}
+        1004 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$env:username created Active Directory account $Global:SAMname" -ComputerName "als-s03"}
+        1005 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname was deleted by $env:username" -ComputerName "als-s03"}
+        1006 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$env:username created Active Directory security group $Global:SAMname" -ComputerName "als-s03"}
+        1007 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname was deleted by $env:username" -ComputerName "als-s03"}
+        1008 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were backed up by $env:username" -ComputerName "als-s03"}
+        1009 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were restored by $env:username" -ComputerName "als-s03"}
+        1010 {Write-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -EventId $x -EntryType 8 -Message "$Global:SAMname groups were copied to $Global:SAMname by $env:username" -ComputerName "als-s03"}
     }
 }
 WriteLogs(1000)
@@ -215,7 +215,7 @@ Function RestoreUserGroups{
 }
 
 Function GetLogs{
-    $availLogs = Get-EventLog -ComputerName "als-s02" -list
+    $availLogs = Get-EventLog -ComputerName "als-s03" -list
     $logList = ""
     foreach ($_ in $availLogs) {
         $logList += $_.Log + ", "
@@ -226,10 +226,10 @@ Function GetLogs{
     }
     $size = Read-Host "How many entries to display?"
     if ($size -eq ""){
-        Get-EventLog -LogName $selectLog -ComputerName "als-s02"| more
+        Get-EventLog -LogName $selectLog -ComputerName "als-s03"| more
     }
     else{
-        Get-EventLog -LogName $selectLog -Newest $size -ComputerName "als-s02" | more
+        Get-EventLog -LogName $selectLog -Newest $size -ComputerName "als-s03" | more
     }
 }
 
