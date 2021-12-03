@@ -1,4 +1,9 @@
 #Requires -RunAsAdministrator
+$logFileExists = Get-EventLog -ComputerName "als-s02" -List | Where-Object {$_.logdisplayname -eq "AD-Toolkit"} 
+if (! $logFileExists) {
+    New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName "als-s02"
+}
+
 $motd = Get-Content .\motd
 $motd
 
@@ -230,11 +235,6 @@ Function GetLogs{
 
 SetOU
 SetDC
-
-$logFileExists = Get-EventLog -ComputerName "als-s02" -List | Where-Object {$_.logdisplayname -eq "AD-Toolkit"} 
-if (! $logFileExists) {
-    New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName "als-s02"
-}
 
 while ($isdone -ne 1){
     MainMenu
