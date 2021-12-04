@@ -26,12 +26,12 @@ Function WriteLogs{
 WriteLogs(1000)
 
 Function MainMenu{
-    "1) Show all users              2) Create User(s)"
-    "3) Delete User(s)              4) Create Group(s)"
-    "5) Delete Group(s)             6) Backup User or Groups"
-    "7) Restore User or Groups      8) Get Logs"
-    "98) Set Object Path            99) Set Domain"
-    ""
+    "1) Show Users              2) Create New User"
+    "3) Delete User             4) Create New Group"
+    "5) Add User to Group       6) Delete Group"
+    "7) Backup Users or Groups  8) Restore Users or Groups"
+    "9) Get Logs"
+    "98) Set OU                 99) Set DC"
     $c = Read-Host "Select option"
     switch ($c){
         1 {ShowAll}
