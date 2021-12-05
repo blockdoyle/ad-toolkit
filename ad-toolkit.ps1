@@ -131,6 +131,12 @@ Function NewUser{ # Creates a new user
         "" {CopyUserGroup($Global:username)}
         "N" {continue}
     }
+    $changePassword = Read-Host "Require user to change password on logon? (Y\n)"
+    switch ($changePassword) {
+        "N" { continue }
+        "Y" { Set-ADUser -Identity $username -ChangePasswordAtLogon }
+        Default { Set-ADUser -Identity $username -ChangePasswordAtLogon }
+    }
 }
 
 # Adds selected user(s) to the specified group.
