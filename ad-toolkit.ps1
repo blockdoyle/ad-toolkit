@@ -1,12 +1,16 @@
 #Requires -RunAsAdministrator
+
+#Checks if the "AD-Toolkit" log file exists on 'als-s03' and creates it if it doesn't.
 $logFileExists = Get-EventLog -ComputerName "als-s03" -List | Where-Object {$_.logdisplayname -eq "AD-Toolkit"} 
 if (! $logFileExists) {
     New-EventLog -LogName "AD-Toolkit" -Source "AD-Toolkit" -ComputerName "als-s03"
 }
 
+# Prints content of motd file to console.
 $motd = Get-Content .\motd
 $motd
 
+# When an integer is passed into "$x" in WriteLogs, it is matched in the switch statement which will use "Write-EventLog" to write logs to "als-s03"
 Function WriteLogs{
     Param($x)
     switch ($x){
@@ -25,6 +29,7 @@ Function WriteLogs{
 }
 WriteLogs(1000)
 
+# Prints options to console. Different functions can be selected by typing the corresponding number and hitting "Enter."
 Function MainMenu{
     "1) Show Users              2) Create New User"
     "3) Delete User             4) Create New Group"
@@ -48,11 +53,13 @@ Function MainMenu{
     }
 }
 
+# Sets the Organizational Unit where changes will be made.
 Function SetOU{
     $Global:oupath = Read-Host "Enter OU Path"
     WriteLogs(1001)
 }
 
+# Sets the Domain where changes will be made.
 Function SetDC{
     $domName = Read-Host "Enter domain"
     $splitDomName = $domName.Split(".")
@@ -62,6 +69,7 @@ Function SetDC{
     WriteLogs(1002)
 }
 
+# Prints user details to screen. "*" will print all users on Active Directory to console.
 Function ShowAll{ #Shows all users or shows specified user
     $searchUser = Read-Host "Search user"
     if ($searchUser -eq "*"){
@@ -79,6 +87,7 @@ Function ShowAll{ #Shows all users or shows specified user
     }
 }
 
+# Asks the user multiple questions that will be passed into the "New-ADUser" command. After the new user is created, function will ask if they want the account to be enabled, and if groups should be copied from another user.
 Function NewUser{ # Creates a new user
     # $Global:oupath = Read-Host "Enter 'Users and Groups' path"
     $fullname = Read-Host "Enter full name"
@@ -123,6 +132,8 @@ Function NewUser{ # Creates a new user
         "N" {continue}
     }
 }
+
+# Adds selected user(s) to the specified group.
 Function UserGroupAdd{
     $users = Read-Host "Enter name of user(s). Comma ',' separated"
     $users = $users.split(",").Replace(" ","")
@@ -132,6 +143,7 @@ Function UserGroupAdd{
     }
 }
 
+# Copies another user's groups to a specified user. This function is used by the NewUser function.
 Function CopyUserGroup{
     param ($user)
     $targetUser = Read-Host "Which user or group would you like to copy groups from?"
@@ -147,6 +159,7 @@ Function CopyUserGroup{
     }
 }
 
+# Deletes specified user from Active Directory.
 Function DeleteUser{
     $delUser = Read-Host "Enter user identity to remove"
     Remove-ADUser -Identity $delUser -Confirm
@@ -154,6 +167,7 @@ Function DeleteUser{
     WriteLogs(1005)
 }
 
+# Takes user input for group name and splices into a shorter name, passing all variables to "New-ADGroup"
 Function NewGroup {
     # $Global:oupath = Read-Host "OU Path"
     $gName = Read-Host "Enter Group Name"
@@ -178,6 +192,7 @@ Function NewGroup {
         "N" {continue}
 }}
 
+# Deletes the specififed group.
 Function DeleteGroup{
     $delGroup = Read-Host "Enter group SAM name to remove"
     Remove-ADGroup -Identity $delGroup -Confirm
@@ -185,6 +200,7 @@ Function DeleteGroup{
     WriteLogs(1007)
 }
 
+# Creates a backup of user/group security groups to a '.txt' file in the location specified in "$fpath"
 Function BackupUserGroups{
     $users = read-host "Enter username or Group SAM name to backup"
     $fpath = Read-Host "Enter backup location (DO NOT ENTER FILENAME)"
@@ -198,6 +214,7 @@ Function BackupUserGroups{
     WriteLogs(1008)
 }
 
+# Restores groups to the user, from a file backup specified in "$fpath"
 Function RestoreUserGroups{
     $users = read-host "Enter username or Group SAM name to restore"
     $users = $users.split(",").Replace(" ","")
@@ -214,6 +231,7 @@ Function RestoreUserGroups{
     }
 }
 
+# Retreives logs from "als-s03." 
 Function GetLogs{
     $availLogs = Get-EventLog -ComputerName "als-s03" -list
     $logList = ""
@@ -233,9 +251,12 @@ Function GetLogs{
     }
 }
 
+# Starts SetOU function.
 SetOU
+# Starts SetDC function.
 SetDC
 
+# Runs the MainMenu function in a loop.
 while ($isdone -ne 1){
     MainMenu
 }
