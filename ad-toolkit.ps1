@@ -134,8 +134,8 @@ Function NewUser{ # Creates a new user
     $changePassword = Read-Host "Require user to change password on logon? (Y\n)"
     switch ($changePassword) {
         "N" { continue }
-        "Y" { Set-ADUser -Identity $username -ChangePasswordAtLogon }
-        Default { Set-ADUser -Identity $username -ChangePasswordAtLogon }
+        "Y" { Set-ADUser -Identity $username -ChangePasswordAtLogon $True }
+        Default { Set-ADUser -Identity $username -ChangePasswordAtLogon $True }
     }
 }
 
