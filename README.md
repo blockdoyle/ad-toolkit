@@ -9,4 +9,6 @@ A simple GUI application to easily manage an Active Directory environment
 ## Usage
 1. Change directory to ad-toolkit folder
 2. Run the program by typing: `.\ad-toolkit`
-3. Select options by typing the corresponding number and pressing `ENTER`
+3. Set OU to where you want to make changes in your AD environemtn. Example: `OU=Users`
+4. Set DC to your domain address. Example: `acme.com`
+5. Select options by typing the corresponding number and pressing `ENTER`
